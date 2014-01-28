@@ -1,0 +1,6 @@
+:CONV_START
+:CONV_END
+:DB_START
+dbName=tdp_cadre_box,helperClass=org.telugudesam.cadre.database.DbHelper,dbVersion=1
+org.telugudesam.cadre.objects.dao.DevelopmentCardTable
+:DB_END

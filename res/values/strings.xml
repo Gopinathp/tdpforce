@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TDP Force</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_change_your_target">Change your target</string>
+
+    <string-array name="other_parties">
+        <item>YSRCP</item>
+        <item>Congress</item>
+        <item>Loksatta</item>
+        <item>BJP</item>
+        <item>AAP</item>
+        <item>CPI</item>
+        <item>CPM</item>
+    </string-array>
+    <string-array name="section_headings">
+        <item>Why TDP</item>
+        <item>Why not Congress</item>
+        <item>Why not YSRCP</item>
+        <item>Why not LokSatta</item>
+        <item>Why not AAP</item>
+    </string-array>
+
+    <string name="conversion_counter">Conversion Counter</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="title_activity_conversion_counter">Conversion Target</string>
+    <string name="default_count_down">100</string>
+    <string name="target_title">Target for elections 2014</string>
+    <string name="register_a_conversion">Register a conversion</string>
+    <string name="target_details">You are %1$d people conversions away from your target</string>
+    <string name="title_activity_conversion_registration">Register a conversion</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="register">Register</string>
+    <string name="app_id">179496312189548</string>
+    <string name="get_started_msg">To get started with Conversion Counter, click on the button below.</string>
+    <string name="gear_up_msg">Dear %1$d, Gear up for the upcoming elections 2014.</string>
+
+</resources>
