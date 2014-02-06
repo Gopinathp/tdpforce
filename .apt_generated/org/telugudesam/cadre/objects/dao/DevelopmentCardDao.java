@@ -5,7 +5,9 @@ import com.turbomanage.storm.DatabaseHelper;
 import com.turbomanage.storm.TableHelper;
 import org.telugudesam.cadre.objects.DevelopmentCard;
 import com.turbomanage.storm.SQLiteDao;
+import com.turbomanage.storm.types.DateConverter;
 import com.turbomanage.storm.types.LongConverter;
+import com.turbomanage.storm.types.BooleanConverter;
 import com.turbomanage.storm.types.StringConverter;
 
 /**

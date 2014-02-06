@@ -1,6 +1,7 @@
 package org.telugudesam.cadre.components;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.telugudesam.cadre.App;
@@ -73,8 +74,18 @@ public class MemCache {
 	private static List<DevelopmentCard> loadCards(Section section) {
 		DevelopmentCardDao cardDao = new DevelopmentCardDao(App.getContext());
 		Cursor cursor = cardDao.query(
-				"SECTIONSARRAY LIKE '%" + section.ordinal() + "%'", null);
-		return cardDao.asList(cursor);
+				"SECTIONSARRAY LIKE '%" + section.ordinal() + "%' and isDeleted=0 ", null);
+		List<DevelopmentCard> list = cardDao.asList(cursor);
+		Collections.sort(list);
+		return list;
+	}
+
+	public static void resetDevelopmentCards() {
+		yTDPdevCards = null;
+		yNotYsrcpdevCards = null;
+		yNotCongressdevCards = null;
+		yNotLoksattadevCards = null;
+		yNotAapdevCards = null;
 	}
 
 }

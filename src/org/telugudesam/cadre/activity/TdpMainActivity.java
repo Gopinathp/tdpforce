@@ -1,7 +1,12 @@
 package org.telugudesam.cadre.activity;
 
+import java.util.List;
+
 import org.telugudesam.cadre.R;
+import org.telugudesam.cadre.database.DbHelper;
 import org.telugudesam.cadre.fragments.DevelopmentCardsFragment;
+import org.telugudesam.cadre.objects.Events;
+import org.telugudesam.cadre.util.L;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -11,9 +16,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import de.greenrobot.event.EventBus;
+
 public class TdpMainActivity extends BaseTdpActivity implements
 		ActionBar.OnNavigationListener {
 
+	private static final int FETCH_SIZE = 1000;
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
 	 * current dropdown position.
@@ -38,6 +51,30 @@ public class TdpMainActivity extends BaseTdpActivity implements
 						android.R.layout.simple_list_item_1,
 						android.R.id.text1, getResources().getStringArray(
 								R.array.section_headings)), this);
+		triggerCardsFetch();
+	}
+
+	private void triggerCardsFetch() {
+		L.d("triggerCardsFetch");
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("DevelopmentCard");
+		query.whereGreaterThan("updatedAt", DbHelper.getLatestDevCardRecordUpdatedAt());
+		query.orderByAscending("updatedAt");
+		query.setLimit(FETCH_SIZE);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			
+			@Override
+			public void done(List<ParseObject> list, ParseException exception) {
+				L.print(exception);
+				if(exception == null) {
+					DbHelper.persistDevCards(list);
+					EventBus.getDefault().post(new Events.RefreshCards());
+					if(list.size() == FETCH_SIZE) {
+						triggerCardsFetch();
+					}
+				}
+				
+			}
+		});
 	}
 
 	@Override

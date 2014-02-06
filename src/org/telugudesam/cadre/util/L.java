@@ -109,7 +109,7 @@ public class L {
 	 */
 	public static void print(Exception e) {
 		if (e != null) {
-			L.e("Exception: " + Log.getStackTraceString(e));
+			L.d("Exception: " + Log.getStackTraceString(e));
 		} else
 			L.d("exception which is null");
 

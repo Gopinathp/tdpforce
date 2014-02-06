@@ -2,12 +2,11 @@ package org.telugudesam.cadre.activity;
 
 import org.telugudesam.cadre.util.L;
 
-import com.readystatesoftware.systembartint.SystemBarTintManager;
-
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
+
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 public abstract class BaseTdpActivity extends FragmentActivity {
 

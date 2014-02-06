@@ -17,16 +17,24 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 public class DevelopmentCardsAdapter extends BaseAdapter {
 
 	private ArrayList<DevelopmentCard> cards;
 	private WeakReference<Activity> activityRef;
 	private LayoutInflater inflater;
+	private Section section;
 
 	public DevelopmentCardsAdapter(Activity activity, Section section) {
+		this.section = section;
 		L.d("DevelopmentCardsAdapter: section = " + section.name());
 		this.activityRef = new WeakReference<Activity>(activity);
 		inflater = LayoutInflater.from(activity);
+		cards = MemCache.getDevelopmentCards(section);
+	}
+	
+	public void refreshCards() {
 		cards = MemCache.getDevelopmentCards(section);
 	}
 
@@ -65,14 +73,20 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 		private ImageView picImageView;
 		private TextView titleTextView;
 
-		public ViewHolder(View v, DevelopmentCard item) {
+		public ViewHolder(View v, DevelopmentCard card) {
+			L.d(card);
 			picImageView = (ImageView) v.findViewById(R.id.picImageView);
 			titleTextView = (TextView) v.findViewById(R.id.thank_you_textview);
-			updateView(item);
+			updateView(card);
 		}
 
 		public void updateView(DevelopmentCard item) {
-//			Picasso.with(activityRef.get()).load(item.getPicsArray()).into(picImageView);
+			ArrayList<String> pics = item.getPics();
+			for (String aPic: pics) {
+				Picasso.with(activityRef.get()).load(item.getPicsArray()).into(picImageView);
+				break;
+			}
+			
 			titleTextView.setText(item.getTitle());
 		}
 

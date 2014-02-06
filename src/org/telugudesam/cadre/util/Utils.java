@@ -1,8 +1,12 @@
 package org.telugudesam.cadre.util;
 
+import java.util.Set;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import com.parse.ParseObject;
 
 public class Utils {
 	
@@ -28,6 +32,16 @@ public class Utils {
 		}
 
 		return false;
+	}
+
+	public static void printParseObject(ParseObject object) {
+		Set<String> keys = object.keySet();
+		L.d("parse object start");
+		for (String key : keys) {
+			L.d(key + " = " + object.get(key));
+		}
+		L.d("parse object end");
+		
 	}
 
 }

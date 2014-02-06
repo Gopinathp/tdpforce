@@ -9,7 +9,7 @@
 
         <!-- API 19 theme customizations can go here. -->
         <item name="android:fitsSystemWindows">true</item>
-        <item name="android:windowBackground">@color/red</item>
+        <item name="android:windowBackground">@color/background</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">false</item>
     </style>

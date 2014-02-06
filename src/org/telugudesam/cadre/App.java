@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import com.facebook.model.GraphUser;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseObject;
 
 public class App extends Application implements UncaughtExceptionHandler {
 	
@@ -61,6 +62,11 @@ public class App extends Application implements UncaughtExceptionHandler {
 		DevelopmentCardDao dao = new DevelopmentCardDao(this);
 		dao.insertMany(cards);
 		
+		ArrayList<ParseObject> objects = new ArrayList<ParseObject>();
+		for (DevelopmentCard developmentCard : cards) {
+			objects.add(developmentCard.toParseObject());
+		}
+		ParseObject.saveAllInBackground(objects);
 	}
 
 	private DevelopmentCard createCongressCard() {
