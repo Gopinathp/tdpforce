@@ -8,6 +8,8 @@ import org.json.JSONException;
 import org.telugudesam.cadre.util.L;
 import org.telugudesam.cadre.util.Utils;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -16,7 +18,7 @@ import com.turbomanage.storm.api.Entity;
 import com.turbomanage.storm.api.Id;
 
 @Entity
-public class DevelopmentCard implements Comparable<DevelopmentCard> {
+public class DevelopmentCard implements Comparable<DevelopmentCard>, Parcelable {
 
 	@Id
 	private long id;
@@ -175,4 +177,51 @@ public class DevelopmentCard implements Comparable<DevelopmentCard> {
 		this.isDeleted = isDeleted;
 	}
 
+	protected DevelopmentCard(Parcel in) {
+		id = in.readLong();
+		picsArray = in.readString();
+		title = in.readString();
+		subTitle = in.readString();
+		notes = in.readString();
+		sectionsArray = in.readString();
+		isDeleted = in.readByte() != 0x00;
+		long tmpCreatedAt = in.readLong();
+		createdAt = tmpCreatedAt != -1 ? new Date(tmpCreatedAt) : null;
+		long tmpUpdatedAt = in.readLong();
+		updatedAt = tmpUpdatedAt != -1 ? new Date(tmpUpdatedAt) : null;
+	}
+
+	public DevelopmentCard() {
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeLong(id);
+		dest.writeString(picsArray);
+		dest.writeString(title);
+		dest.writeString(subTitle);
+		dest.writeString(notes);
+		dest.writeString(sectionsArray);
+		dest.writeByte((byte) (isDeleted ? 0x01 : 0x00));
+		dest.writeLong(createdAt != null ? createdAt.getTime() : -1L);
+		dest.writeLong(updatedAt != null ? updatedAt.getTime() : -1L);
+	}
+
+	@SuppressWarnings("unused")
+	public static final transient Parcelable.Creator<DevelopmentCard> CREATOR = new Parcelable.Creator<DevelopmentCard>() {
+		@Override
+		public DevelopmentCard createFromParcel(Parcel in) {
+			return new DevelopmentCard(in);
+		}
+
+		@Override
+		public DevelopmentCard[] newArray(int size) {
+			return new DevelopmentCard[size];
+		}
+	};
 }

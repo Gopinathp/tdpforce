@@ -2,6 +2,7 @@ package org.telugudesam.cadre.activity;
 
 import java.util.List;
 
+import org.telugudesam.cadre.Config;
 import org.telugudesam.cadre.R;
 import org.telugudesam.cadre.database.DbHelper;
 import org.telugudesam.cadre.fragments.DevelopmentCardsFragment;
@@ -10,6 +11,9 @@ import org.telugudesam.cadre.util.L;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
@@ -17,11 +21,14 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import com.parse.FindCallback;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import de.greenrobot.event.EventBus;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class TdpMainActivity extends BaseTdpActivity implements
 		ActionBar.OnNavigationListener {
@@ -36,6 +43,7 @@ public class TdpMainActivity extends BaseTdpActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ParseAnalytics.trackAppOpened(getIntent());
 		setContentView(R.layout.activity_tdp_main);
 		getActionBar().setDisplayHomeAsUpEnabled(false);
 
@@ -57,22 +65,33 @@ public class TdpMainActivity extends BaseTdpActivity implements
 	private void triggerCardsFetch() {
 		L.d("triggerCardsFetch");
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("DevelopmentCard");
-		query.whereGreaterThan("updatedAt", DbHelper.getLatestDevCardRecordUpdatedAt());
+		query.whereGreaterThan("updatedAt",
+				DbHelper.getLatestDevCardRecordUpdatedAt());
 		query.orderByAscending("updatedAt");
 		query.setLimit(FETCH_SIZE);
 		query.findInBackground(new FindCallback<ParseObject>() {
-			
+
 			@Override
 			public void done(List<ParseObject> list, ParseException exception) {
 				L.print(exception);
-				if(exception == null) {
+				if (exception == null) {
 					DbHelper.persistDevCards(list);
 					EventBus.getDefault().post(new Events.RefreshCards());
-					if(list.size() == FETCH_SIZE) {
+					if (list.size() > 0) {
+						Crouton.makeText(
+								TdpMainActivity.this,
+								list.size()
+										+ " new cards have been downloaded or updated",
+								Style.INFO).show();
+					} else {
+						Crouton.makeText(TdpMainActivity.this,
+								"No new cards found", Style.INFO).show();
+					}
+					if (list.size() == FETCH_SIZE) {
 						triggerCardsFetch();
 					}
 				}
-				
+
 			}
 		});
 	}
@@ -107,8 +126,47 @@ public class TdpMainActivity extends BaseTdpActivity implements
 			return true;
 		} else if (item.getItemId() == android.R.id.home) {
 			return false;
+		} else if (item.getItemId() == R.id.action_refresh) {
+			triggerCardsFetch();
+			return true;
+		} else if (item.getItemId() == R.id.action_contact_us) {
+			launchEmailClient();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void launchEmailClient() {
+		/* Create the Intent */
+		final Intent emailIntent = new Intent(
+				android.content.Intent.ACTION_SEND);
+
+		/* Fill it with Data */
+		emailIntent.setType("plain/text");
+		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+				new String[] { Config.CONTACT_US_EMAIL });
+		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+				"Feedback on " + getAppName());
+
+		/* Send it off to the Activity-Chooser */
+		try {
+			startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+		} catch (Exception e) {
+		}
+
+	}
+
+	private String getAppName() {
+		final PackageManager pm = getApplicationContext().getPackageManager();
+		ApplicationInfo ai;
+		try {
+			ai = pm.getApplicationInfo(this.getPackageName(), 0);
+		} catch (final NameNotFoundException e) {
+			ai = null;
+		}
+		final String applicationName = (String) (ai != null ? pm
+				.getApplicationLabel(ai) : "(unknown)");
+		return applicationName;
 	}
 
 	private void launchCountDownActivity() {

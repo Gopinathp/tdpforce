@@ -76,9 +76,10 @@ public class ConversionCounterActivity extends BaseTdpActivity implements
 	}
 
 	protected void setTexts() {
-		findViewById(R.id.thank_you_textview).setVisibility(View.VISIBLE);
-		//((TextView)findViewById(R.id.gear_up_textview)).setText(getString(R.string.gear_up_msg, formatArgs));
-		
+		findViewById(R.id.title_textview).setVisibility(View.VISIBLE);
+		// ((TextView)findViewById(R.id.gear_up_textview)).setText(getString(R.string.gear_up_msg,
+		// formatArgs));
+
 	}
 
 	@Override
@@ -137,6 +138,7 @@ public class ConversionCounterActivity extends BaseTdpActivity implements
 		AlertDialog dialog = builder.create();
 		targetEditText = (EditText) view.findViewById(R.id.targetEditText);
 		targetEditText.setText(String.valueOf(App.getConversionTarget()));
+		targetEditText.setSelectAllOnFocus(true);
 		dialog.show();
 
 	}

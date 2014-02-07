@@ -2,18 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_small"
     android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/title_textview"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:maxLines="2"
+        android:text="This is a title" />
 
     <ImageView
         android:id="@+id/picImageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
+        android:layout_marginTop="@dimen/margin_small"
         android:src="@drawable/web_hi_res_512" />
 
     <TextView
-        android:id="@+id/thank_you_textview"
+        android:id="@+id/sub_title_textview"
+        style="@android:style/TextAppearance.Small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:layout_marginBottom="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_small"
+        android:autoLink="all"
+        android:ellipsize="end"
+        android:text="This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle." />
 
 </LinearLayout>

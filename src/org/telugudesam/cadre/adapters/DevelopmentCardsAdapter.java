@@ -3,15 +3,20 @@ package org.telugudesam.cadre.adapters;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import org.telugudesam.cadre.Constants.BundleExtras;
 import org.telugudesam.cadre.R;
+import org.telugudesam.cadre.activity.PreviewActivity;
 import org.telugudesam.cadre.components.MemCache;
 import org.telugudesam.cadre.objects.DevelopmentCard;
 import org.telugudesam.cadre.objects.Section;
 import org.telugudesam.cadre.util.L;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -33,7 +38,7 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 		inflater = LayoutInflater.from(activity);
 		cards = MemCache.getDevelopmentCards(section);
 	}
-	
+
 	public void refreshCards() {
 		cards = MemCache.getDevelopmentCards(section);
 	}
@@ -57,7 +62,7 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View v, ViewGroup viewGroup) {
 		ViewHolder holder = null;
-		if(v == null) {
+		if (v == null) {
 			v = inflater.inflate(R.layout.adapter_dev_card, null);
 			holder = new ViewHolder(v, getItem(position));
 			v.setTag(holder);
@@ -67,28 +72,78 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 		}
 		return v;
 	}
-	
-	public class ViewHolder {
+
+	public class ViewHolder implements OnClickListener {
 
 		private ImageView picImageView;
 		private TextView titleTextView;
+		private TextView subTitleTextView;
+		private DevelopmentCard card;
 
 		public ViewHolder(View v, DevelopmentCard card) {
 			L.d(card);
 			picImageView = (ImageView) v.findViewById(R.id.picImageView);
-			titleTextView = (TextView) v.findViewById(R.id.thank_you_textview);
+			titleTextView = (TextView) v.findViewById(R.id.title_textview);
+			subTitleTextView = (TextView) v
+					.findViewById(R.id.sub_title_textview);
 			updateView(card);
 		}
 
 		public void updateView(DevelopmentCard item) {
+			this.card = item;
 			ArrayList<String> pics = item.getPics();
-			for (String aPic: pics) {
-				Picasso.with(activityRef.get()).load(item.getPicsArray()).into(picImageView);
+			boolean isPicAvailable = false;
+			for (String aPic : pics) {
+				Picasso.with(activityRef.get()).load(aPic).into(picImageView);
+				picImageView.setTag(aPic);
+				isPicAvailable = true;
 				break;
 			}
-			
-			titleTextView.setText(item.getTitle());
+
+			picImageView.setOnClickListener(this);
+
+			if (isPicAvailable) {
+				picImageView.setVisibility(View.VISIBLE);
+			} else {
+				picImageView.setVisibility(View.GONE);
+			}
+
+			if (TextUtils.isEmpty(item.getTitle())) {
+				titleTextView.setVisibility(View.GONE);
+			} else {
+				titleTextView.setText(item.getTitle());
+				titleTextView.setVisibility(View.VISIBLE);
+			}
+
+			if (TextUtils.isEmpty(item.getSubTitle())) {
+				subTitleTextView.setVisibility(View.GONE);
+			} else {
+				subTitleTextView.setText(item.getSubTitle());
+				subTitleTextView.setVisibility(View.VISIBLE);
+			}
 		}
 
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.picImageView:
+				showFullScreenPic((ImageView) v, card);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	public void showFullScreenPic(ImageView v, DevelopmentCard card) {
+		String url = (String) v.getTag();
+		Intent intent = new Intent(activityRef.get(), PreviewActivity.class);
+		intent.putExtra(BundleExtras.PIC_URL, url);
+		intent.putExtra(BundleExtras.CARD, card);
+		String title = activityRef.get().getResources()
+				.getStringArray(R.array.section_headings)[section.ordinal()];
+		intent.putExtra(BundleExtras.CATEGORY_TITLE, title);
+		activityRef.get().startActivity(intent);
 	}
 }

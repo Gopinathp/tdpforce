@@ -35,5 +35,9 @@
     <string name="app_id">179496312189548</string>
     <string name="get_started_msg">To get started with Conversion Counter, click on the button below.</string>
     <string name="gear_up_msg">Dear %1$d, Gear up for the upcoming elections 2014.</string>
+    <string name="title_activity_preview">PreviewActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

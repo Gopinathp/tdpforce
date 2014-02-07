@@ -17,7 +17,7 @@
         tools:context=".activity.ConversionCounterActivity" >
 
         <TextView
-            android:id="@+id/thank_you_textview"
+            android:id="@+id/title_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -29,7 +29,7 @@
             android:id="@+id/selection_profile_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/thank_you_textview"
+            android:layout_below="@+id/title_textview"
             android:layout_gravity="center"
             android:gravity="center_horizontal"
             app:preset_size="small" />
@@ -64,7 +64,7 @@
             android:id="@+id/goal_msg_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/thank_you_textview"
+            android:layout_alignRight="@+id/title_textview"
             android:layout_below="@+id/selection_profile_pic"
             android:layout_marginTop="28dp"
             android:text="@string/target_details"
