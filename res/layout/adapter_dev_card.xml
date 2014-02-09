@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/margin_small"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="@dimen/margin_small" >
 
     <TextView
         android:id="@+id/title_textview"
@@ -14,24 +14,40 @@
         android:ellipsize="end"
         android:gravity="left"
         android:maxLines="2"
-        android:text="This is a title" />
+        android:text="This is a title"
+        android:textIsSelectable="false" />
 
     <ImageView
         android:id="@+id/picImageView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginTop="@dimen/margin_small"
-        android:src="@drawable/web_hi_res_512" />
+        android:layout_marginTop="@dimen/margin_small" />
 
-    <TextView
-        android:id="@+id/sub_title_textview"
-        style="@android:style/TextAppearance.Small"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
         android:layout_marginTop="@dimen/margin_small"
-        android:autoLink="all"
-        android:ellipsize="end"
-        android:text="This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle." />
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/sub_title_textview"
+            style="@android:style/TextAppearance.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autoLink="all"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:text="This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle.This is a subtitle."
+            android:textIsSelectable="true" />
+
+        <ImageView
+            android:id="@+id/expand_collapse_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_action_navigation_expand" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -69,19 +68,19 @@ public class PreviewActivity extends BaseTdpActivity {
 		getActionBar().setTitle(
 				intent.getStringExtra(BundleExtras.CATEGORY_TITLE));
 
-		if (TextUtils.isEmpty(card.getTitle())) {
-			titleTextView.setVisibility(View.INVISIBLE);
-		} else {
-			titleTextView.setText(card.getTitle());
-			titleTextView.setVisibility(View.VISIBLE);
-		}
-
-		if (TextUtils.isEmpty(card.getSubTitle())) {
-			subTitleTextView.setVisibility(View.INVISIBLE);
-		} else {
-			subTitleTextView.setText(card.getSubTitle());
-			subTitleTextView.setVisibility(View.VISIBLE);
-		}
+		// if (TextUtils.isEmpty(card.getTitle())) {
+		// titleTextView.setVisibility(View.INVISIBLE);
+		// } else {
+		// titleTextView.setText(card.getTitle());
+		// titleTextView.setVisibility(View.VISIBLE);
+		// }
+		//
+		// if (TextUtils.isEmpty(card.getSubTitle())) {
+		// subTitleTextView.setVisibility(View.INVISIBLE);
+		// } else {
+		// subTitleTextView.setText(card.getSubTitle());
+		// subTitleTextView.setVisibility(View.VISIBLE);
+		// }
 
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.

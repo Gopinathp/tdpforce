@@ -30,9 +30,13 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_tdp_yellow_ab</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_tdp_yellow_ab</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Tdp_yellow_ab</item>
-
+        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
         <!-- Light.DarkActionBar specific -->
         <item name="android:actionBarWidgetTheme">@style/Theme.Tdp_yellow_ab.Widget</item>
+    </style>
+
+    <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_core_overflow</item>
     </style>
 
     <style name="ActionBar.Solid.Tdp_yellow_ab" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">

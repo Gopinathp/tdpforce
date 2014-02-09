@@ -17,6 +17,7 @@ public class MemCache {
 	private static ArrayList<DevelopmentCard> yNotYsrcpdevCards;
 	private static ArrayList<DevelopmentCard> yNotLoksattadevCards;
 	private static ArrayList<DevelopmentCard> yNotAapdevCards;
+	private static ArrayList<DevelopmentCard> yNotTrsdevCards;
 
 	public static ArrayList<DevelopmentCard> getDevelopmentCards(Section section) {
 		switch (section) {
@@ -30,10 +31,19 @@ public class MemCache {
 			return getLoksattaCards();
 		case WHY_NOT_AAP:
 			return getAapCards();
+		case WHY_NOT_TRS:
+			return getTrsCards();
 		default:
 			break;
 		}
 		return null;
+	}
+
+	private static ArrayList<DevelopmentCard> getTrsCards() {
+		if (yNotTrsdevCards == null) {
+			yNotTrsdevCards = (ArrayList<DevelopmentCard>) loadCards(Section.WHY_NOT_TRS);
+		}
+		return yNotTrsdevCards;
 	}
 
 	private static ArrayList<DevelopmentCard> getAapCards() {
@@ -74,7 +84,8 @@ public class MemCache {
 	private static List<DevelopmentCard> loadCards(Section section) {
 		DevelopmentCardDao cardDao = new DevelopmentCardDao(App.getContext());
 		Cursor cursor = cardDao.query(
-				"SECTIONSARRAY LIKE '%" + section.ordinal() + "%' and isDeleted=0 ", null);
+				"SECTIONSARRAY LIKE '%" + section.ordinal()
+						+ "%' and isDeleted=0 ", null);
 		List<DevelopmentCard> list = cardDao.asList(cursor);
 		Collections.sort(list);
 		return list;
@@ -86,6 +97,7 @@ public class MemCache {
 		yNotCongressdevCards = null;
 		yNotLoksattadevCards = null;
 		yNotAapdevCards = null;
+		yNotTrsdevCards = null;
 	}
 
 }

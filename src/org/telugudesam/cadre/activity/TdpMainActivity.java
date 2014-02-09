@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.telugudesam.cadre.Config;
 import org.telugudesam.cadre.R;
-import org.telugudesam.cadre.database.DbHelper;
+import org.telugudesam.cadre.database.DbUtils;
 import org.telugudesam.cadre.fragments.DevelopmentCardsFragment;
 import org.telugudesam.cadre.objects.Events;
 import org.telugudesam.cadre.util.L;
@@ -14,12 +14,17 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
@@ -43,6 +48,7 @@ public class TdpMainActivity extends BaseTdpActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Crashlytics.start(this);
 		ParseAnalytics.trackAppOpened(getIntent());
 		setContentView(R.layout.activity_tdp_main);
 		getActionBar().setDisplayHomeAsUpEnabled(false);
@@ -66,7 +72,7 @@ public class TdpMainActivity extends BaseTdpActivity implements
 		L.d("triggerCardsFetch");
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("DevelopmentCard");
 		query.whereGreaterThan("updatedAt",
-				DbHelper.getLatestDevCardRecordUpdatedAt());
+				DbUtils.getLatestDevCardRecordUpdatedAt());
 		query.orderByAscending("updatedAt");
 		query.setLimit(FETCH_SIZE);
 		query.findInBackground(new FindCallback<ParseObject>() {
@@ -75,17 +81,13 @@ public class TdpMainActivity extends BaseTdpActivity implements
 			public void done(List<ParseObject> list, ParseException exception) {
 				L.print(exception);
 				if (exception == null) {
-					DbHelper.persistDevCards(list);
-					EventBus.getDefault().post(new Events.RefreshCards());
 					if (list.size() > 0) {
-						Crouton.makeText(
-								TdpMainActivity.this,
-								list.size()
-										+ " new cards have been downloaded or updated",
-								Style.INFO).show();
+						DbUtils.persistDevCards(list);
+						EventBus.getDefault().post(new Events.RefreshCards());
+						showNotification(list.size()
+								+ " new cards have been downloaded or updated");
 					} else {
-						Crouton.makeText(TdpMainActivity.this,
-								"No new cards found", Style.INFO).show();
+						showNotification("No new cards found");
 					}
 					if (list.size() == FETCH_SIZE) {
 						triggerCardsFetch();
@@ -94,6 +96,19 @@ public class TdpMainActivity extends BaseTdpActivity implements
 
 			}
 		});
+	}
+
+	private void showNotification(String msg) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			Toast toast = Toast.makeText(this, "    " + msg + "    ",
+					Toast.LENGTH_LONG);
+			TextView view = (TextView) toast.getView().findViewById(
+					android.R.id.message);
+			view.setGravity(Gravity.CENTER);
+			toast.show();
+		} else {
+			Crouton.makeText(TdpMainActivity.this, msg, Style.INFO).show();
+		}
 	}
 
 	@Override

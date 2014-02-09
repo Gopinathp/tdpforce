@@ -13,6 +13,7 @@
         <item>AAP</item>
         <item>CPI</item>
         <item>CPM</item>
+        <item>TRS</item>
     </string-array>
     <string-array name="section_headings">
         <item>Why TDP</item>
@@ -20,6 +21,7 @@
         <item>Why not YSRCP</item>
         <item>Why not LokSatta</item>
         <item>Why not AAP</item>
+        <item>Why not TRS</item>
     </string-array>
 
     <string name="conversion_counter">Conversion Counter</string>

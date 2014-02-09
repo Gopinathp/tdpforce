@@ -27,7 +27,8 @@
         android:shadowColor="@android:color/black"
         android:text="Sub Title of the content"
         android:textColor="@android:color/white"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        android:visibility="gone" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -55,7 +56,8 @@
                 android:background="@null"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="@string/dummy_button" />
+                android:text="@string/dummy_button"
+                android:visibility="gone" />
         </LinearLayout>
     </FrameLayout>
 

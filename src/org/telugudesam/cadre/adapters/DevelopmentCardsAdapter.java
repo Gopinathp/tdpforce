@@ -14,6 +14,7 @@ import org.telugudesam.cadre.util.L;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.text.TextUtils.TruncateAt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,6 +69,7 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 			v.setTag(holder);
 		} else {
 			holder = (ViewHolder) v.getTag();
+			holder.isExpanded = false;
 			holder.updateView(getItem(position));
 		}
 		return v;
@@ -78,7 +80,9 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 		private ImageView picImageView;
 		private TextView titleTextView;
 		private TextView subTitleTextView;
+		private ImageView expandCollapseImageView;
 		private DevelopmentCard card;
+		private boolean isExpanded;
 
 		public ViewHolder(View v, DevelopmentCard card) {
 			L.d(card);
@@ -86,6 +90,8 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 			titleTextView = (TextView) v.findViewById(R.id.title_textview);
 			subTitleTextView = (TextView) v
 					.findViewById(R.id.sub_title_textview);
+			expandCollapseImageView = (ImageView) v
+					.findViewById(R.id.expand_collapse_imageview);
 			updateView(card);
 		}
 
@@ -100,7 +106,11 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 				break;
 			}
 
+			handleSubTitleTextToggle(subTitleTextView);
+
 			picImageView.setOnClickListener(this);
+			expandCollapseImageView.setOnClickListener(this);
+			subTitleTextView.setOnClickListener(this);
 
 			if (isPicAvailable) {
 				picImageView.setVisibility(View.VISIBLE);
@@ -117,9 +127,11 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 
 			if (TextUtils.isEmpty(item.getSubTitle())) {
 				subTitleTextView.setVisibility(View.GONE);
+				expandCollapseImageView.setVisibility(View.GONE);
 			} else {
 				subTitleTextView.setText(item.getSubTitle());
 				subTitleTextView.setVisibility(View.VISIBLE);
+				expandCollapseImageView.setVisibility(View.VISIBLE);
 			}
 		}
 
@@ -128,10 +140,33 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 			switch (v.getId()) {
 			case R.id.picImageView:
 				showFullScreenPic((ImageView) v, card);
+			case R.id.sub_title_textview:
+			case R.id.expand_collapse_imageview:
+				handleSubTitleTextToggle(subTitleTextView);
 				break;
 
 			default:
 				break;
+			}
+		}
+
+		public void handleSubTitleTextToggle(TextView subTitleTextView) {
+			if (isExpanded) {
+				isExpanded = false;
+				subTitleTextView.setMaxLines(Integer.MAX_VALUE);
+				subTitleTextView.scrollTo(0, 0);
+				subTitleTextView.setHorizontallyScrolling(false);
+				subTitleTextView.setEllipsize(null);
+				expandCollapseImageView
+						.setImageResource(R.drawable.ic_action_navigation_collapse);
+			} else {
+				isExpanded = true;
+				subTitleTextView.scrollTo(0, 0);
+				subTitleTextView.setMaxLines(2);
+				subTitleTextView.setHorizontallyScrolling(true);
+				subTitleTextView.setEllipsize(TruncateAt.END);
+				expandCollapseImageView
+						.setImageResource(R.drawable.ic_action_navigation_expand);
 			}
 		}
 	}
@@ -146,4 +181,5 @@ public class DevelopmentCardsAdapter extends BaseAdapter {
 		intent.putExtra(BundleExtras.CATEGORY_TITLE, title);
 		activityRef.get().startActivity(intent);
 	}
+
 }
